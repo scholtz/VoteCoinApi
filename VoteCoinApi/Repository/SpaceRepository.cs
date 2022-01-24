@@ -1,18 +1,22 @@
-﻿using VoteCoinApi.Model;
+﻿using Microsoft.Extensions.Options;
+using VoteCoinApi.Model;
 
 namespace VoteCoinApi.Repository
 {
     public class SpaceRepository
     {
+        private readonly IOptionsMonitor<Model.ApiConfig> config;
+
         private readonly List<Space> spaces;
-        public SpaceRepository()
+        public SpaceRepository(IOptionsMonitor<Model.ApiConfig> config)
         {
+            this.config = config;
             this.spaces = new List<Space>() { };
             Init();
         }
         protected void Init()
         {
-            var root = "../asa-list";
+            var root = config.CurrentValue.AsaFolder;
             DirectoryInfo dirInfo = new DirectoryInfo(root);
             var dirs = dirInfo.GetDirectories();
             foreach (var dir in dirs)
