@@ -22,4 +22,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+if (Directory.Exists("/app"))
+{
+    File.WriteAllText("/app/ready.txt", DateTimeOffset.Now.ToString("R"));
+}
 app.Run();
