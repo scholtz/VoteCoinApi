@@ -40,9 +40,16 @@ namespace VoteCoinApi.Repository
 
         internal IEnumerable<SpaceBase> List()
         {
-            return spaces.Select(o => o as SpaceBase);
+            var host = config.CurrentValue.Host.TrimEnd('/');
+            return spaces.Select(o =>
+            {
+                var space = o as SpaceBase;
+                space.IconPath = $"{host}/Space/{o.Asa}/Icon.svg";
+                return space;
+            }
+            );
         }
-        internal byte[] Icon(ulong asa)
+        internal byte[]? Icon(ulong asa)
         {
             return spaces.FirstOrDefault(a => a.Asa == asa)?.Icon;
         }
