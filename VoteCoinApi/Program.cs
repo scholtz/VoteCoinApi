@@ -9,16 +9,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<VoteCoinApi.Repository.SpaceRepository>();
 builder.Services.Configure<VoteCoinApi.Model.ApiConfig>(
     builder.Configuration.GetSection("api"));
-
+builder.Services.AddResponseCaching();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://localhost:8080", "https://app.vote-coin.com");
+        });
+});
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.UseResponseCaching();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors();
 
 if (Directory.Exists("/app"))
 {

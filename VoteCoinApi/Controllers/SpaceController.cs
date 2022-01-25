@@ -18,6 +18,7 @@ namespace VoteCoinApi.Controllers
         }
 
         [HttpGet("List")]
+        [ResponseCache(Duration = 3600 * 1)]
         public ActionResult<IEnumerable<SpaceBase>> List()
         {
             try
@@ -29,13 +30,14 @@ namespace VoteCoinApi.Controllers
                 return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
             }
         }
+        [ResponseCache(Duration = 3600 * 24 * 7)]
         [HttpGet("{assetId}/Icon.svg")]
         public ActionResult GetImage([FromRoute] ulong assetId)
         {
             try
             {
                 var icon = spaceRepository.Icon(assetId);
-                if(icon == null || icon.Length == 0)
+                if (icon == null || icon.Length == 0)
                 {
                     throw new Exception("Asset not found");
                 }
