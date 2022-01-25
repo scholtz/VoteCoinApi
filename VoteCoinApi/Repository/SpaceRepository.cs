@@ -7,11 +7,11 @@ namespace VoteCoinApi.Repository
     {
         private readonly IOptionsMonitor<Model.ApiConfig> config;
 
-        private readonly List<Space> spaces;
+        private readonly List<SpaceWithIcon> spaces;
         public SpaceRepository(IOptionsMonitor<Model.ApiConfig> config)
         {
             this.config = config;
-            this.spaces = new List<Space>() { };
+            this.spaces = new List<SpaceWithIcon>() { };
             Init();
         }
         protected void Init()
@@ -28,18 +28,23 @@ namespace VoteCoinApi.Repository
                 if (ulong.TryParse(parts[1], out var asa))
                 {
                     var icon = System.IO.File.ReadAllBytes(iconpath);
-                    spaces.Add(new Space()
+                    spaces.Add(new SpaceWithIcon()
                     {
                         Asa = asa,
-                        Unit = parts[0]
+                        Unit = parts[0],
+                        Icon = icon
                     });
                 }
             }
         }
 
-        internal List<Space> List()
+        internal IEnumerable<SpaceBase> List()
         {
-            return spaces;
+            return spaces.Select(o => o as SpaceBase);
+        }
+        internal byte[] Icon(ulong asa)
+        {
+            return spaces.FirstOrDefault(a => a.Asa == asa)?.Icon;
         }
     }
 }
