@@ -19,6 +19,7 @@ RUN dotnet publish "VoteCoinApi.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY asa-list asa-list
 COPY tiny-info.json tiny-info.json
 COPY charts-data.json charts-data.json
 ENTRYPOINT ["dotnet", "VoteCoinApi.dll"]
