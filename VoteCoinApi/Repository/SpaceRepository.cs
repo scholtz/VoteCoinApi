@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using RestSharp;
 using VoteCoinApi.Model;
 
 namespace VoteCoinApi.Repository
@@ -7,7 +9,9 @@ namespace VoteCoinApi.Repository
     {
         private readonly IOptionsMonitor<Model.ApiConfig> config;
 
-        private readonly List<SpaceWithIcon> spaces;
+        private List<SpaceWithIcon> spaces;
+        private List<ChartsItem> chartsInfo = new List<ChartsItem>();
+        private Dictionary<ulong, TinyInfo> tinyInfo = new Dictionary<ulong, TinyInfo>();
         public SpaceRepository(IOptionsMonitor<Model.ApiConfig> config)
         {
             this.config = config;
@@ -19,6 +23,10 @@ namespace VoteCoinApi.Repository
             var root = config.CurrentValue.AsaFolder;
             DirectoryInfo dirInfo = new DirectoryInfo(root);
             var dirs = dirInfo.GetDirectories();
+            if (!string.IsNullOrEmpty(config.CurrentValue.TinyInfo))
+            {
+                LoadTinyInfoFromFile();
+            }
             foreach (var dir in dirs)
             {
                 var iconpath = Path.Combine(root, dir.Name, "icon.svg");
@@ -28,16 +36,66 @@ namespace VoteCoinApi.Repository
                 if (ulong.TryParse(parts[1], out var asa))
                 {
                     var icon = System.IO.File.ReadAllBytes(iconpath);
+                    tinyInfo.TryGetValue(asa, out var info);
                     spaces.Add(new SpaceWithIcon()
                     {
                         Asa = asa,
                         Unit = parts[0],
-                        Icon = icon
+                        Icon = icon,
+                        Url = info?.URL,
+                        IsVerified = info?.IsVerified ?? false
                     });
                 }
             }
+            if (string.IsNullOrEmpty(config.CurrentValue.MarketInfo))
+            {
+                LoadMarketInfo().Wait();
+            }
+            if (chartsInfo.Count == 0)
+            {
+                LoadMarketInfoFromFile();
+            }
+            SortSpaces();
         }
-
+        public async Task LoadMarketInfo()
+        {
+            var client = new RestClient("https://tinychart.org");
+            var request = new RestSharp.RestRequest("/api/pools?p=T2", RestSharp.Method.Get);
+            var response = await client.ExecuteAsync(request);
+            if (response.IsSuccessful)
+            {
+                var list = JsonConvert.DeserializeObject<List<ChartsItem>>(response.Content ?? "[]");
+                if (list?.Count > 100)
+                {
+                    chartsInfo = list;
+                }
+            }
+        }
+        public void LoadMarketInfoFromFile()
+        {
+            var list = JsonConvert.DeserializeObject<List<ChartsItem>>(File.ReadAllText(config.CurrentValue.MarketInfo));
+            if (list?.Count > 100)
+            {
+                chartsInfo = list;
+            }
+        }
+        public void LoadTinyInfoFromFile()
+        {
+            var list = JsonConvert.DeserializeObject<TinyInfoCover>(File.ReadAllText(config.CurrentValue.TinyInfo));
+            if (list?.Results?.Count > 100)
+            {
+                tinyInfo = list.Results.ToDictionary(i => i.Id, i => i);
+            }
+        }
+        public void SortSpaces()
+        {
+            foreach (var space in spaces)
+            {
+                var sumOfLiquidity = chartsInfo.Where(c => c.Asset1Id == space.Asa || c.Asset1Id == space.Asa).Sum(c => c.Liquidity);
+                space.Order = sumOfLiquidity;
+            }
+            spaces = spaces.OrderByDescending(c => c.Order).ToList();
+        }
         internal IEnumerable<SpaceBase> List()
         {
             var host = config.CurrentValue.Host.TrimEnd('/');
