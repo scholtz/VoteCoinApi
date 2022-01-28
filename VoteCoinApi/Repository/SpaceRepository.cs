@@ -23,6 +23,7 @@ namespace VoteCoinApi.Repository
             var root = config.CurrentValue.AsaFolder;
             DirectoryInfo dirInfo = new DirectoryInfo(root);
             var pngList = new HashSet<ulong>() { 230946361, 226701642, 233939122, 2751733, 142838028, 231880341 };
+            var banList = new HashSet<ulong>() { 297995609 };
             var dirs = dirInfo.GetDirectories();
             if (!string.IsNullOrEmpty(config.CurrentValue.TinyInfo))
             {
@@ -35,7 +36,11 @@ namespace VoteCoinApi.Repository
                 if (parts.Length != 2) continue;
                 if (ulong.TryParse(parts[1], out var asa))
                 {
-                    var iconMime = "image/svg+xml";
+                    if (banList.Contains(asa))
+                    {
+                        continue;
+                    }
+                        var iconMime = "image/svg+xml";
                     var iconFile = "icon.svg";
                     if (pngList.Contains(asa))
                     {
