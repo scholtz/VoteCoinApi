@@ -37,12 +37,17 @@ namespace VoteCoinApi.Repository
                 {
                     var icon = System.IO.File.ReadAllBytes(iconpath);
                     tinyInfo.TryGetValue(asa, out var info);
+                    var url = info?.URL;
+                    if (!string.IsNullOrEmpty(url) && !(url.StartsWith("//") || url.StartsWith("http://") || url.StartsWith("https://")))
+                    {
+                        url = "https://" + url;
+                    }
                     spaces.Add(new SpaceWithIcon()
                     {
                         Asa = asa,
                         Unit = parts[0],
                         Icon = icon,
-                        Url = info?.URL,
+                        Url = url,
                         IsVerified = info?.IsVerified ?? false
                     });
                 }
