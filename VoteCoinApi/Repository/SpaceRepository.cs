@@ -12,8 +12,11 @@ namespace VoteCoinApi.Repository
         private List<SpaceWithIcon> spaces;
         private List<ChartsItem> chartsInfo = new List<ChartsItem>();
         private Dictionary<ulong, TinyInfo> tinyInfo = new Dictionary<ulong, TinyInfo>();
-        public SpaceRepository(IOptionsMonitor<Model.ApiConfig> config)
+        private Dictionary<ulong, VoteStat> statsInfo = new Dictionary<ulong, VoteStat>();
+        private readonly ILogger<SpaceRepository> logger;
+        public SpaceRepository(IOptionsMonitor<Model.ApiConfig> config, ILogger<SpaceRepository> logger)
         {
+            this.logger = logger;
             this.config = config;
             this.spaces = new List<SpaceWithIcon>() { };
             Init();
@@ -40,7 +43,7 @@ namespace VoteCoinApi.Repository
                     {
                         continue;
                     }
-                        var iconMime = "image/svg+xml";
+                    var iconMime = "image/svg+xml";
                     var iconFile = "icon.svg";
                     if (pngList.Contains(asa))
                     {
@@ -79,7 +82,23 @@ namespace VoteCoinApi.Repository
                 LoadMarketInfoFromFile();
             }
             ProcessNamesFromTinyInfo();
+            LoadStatsFromFile();
             SortSpaces();
+        }
+        private void LoadStatsFromFile()
+        {
+            try
+            {
+                var list = JsonConvert.DeserializeObject<List<VoteStat>>(File.ReadAllText(config.CurrentValue.StatsFile));
+                if (list?.Count > 100)
+                {
+                    statsInfo = list.ToDictionary(t => t.ASA, t => t);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Unable to process stats file: {ex.Message}");
+            }
         }
         private void ProcessNamesFromTinyInfo()
         {

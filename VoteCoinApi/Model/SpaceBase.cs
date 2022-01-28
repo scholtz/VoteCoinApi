@@ -9,5 +9,8 @@
         public decimal Order { get; set; }
         public string Url { get; set; }
         public bool IsVerified { get; set; }
+        public ulong Events { get; set; }
+        public ulong Delegations { get; set; }
+        public ulong Questions { get; set; }
     }
 }
