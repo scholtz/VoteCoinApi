@@ -29,12 +29,22 @@ namespace VoteCoinApi.Repository
             }
             foreach (var dir in dirs)
             {
-                var iconpath = Path.Combine(root, dir.Name, "icon.svg");
+
                 var parts = dir.Name.Split('-');
                 if (parts.Length != 2) continue;
-                if (!System.IO.File.Exists(iconpath)) continue;
                 if (ulong.TryParse(parts[1], out var asa))
                 {
+                    var iconMime = "image/svg+xml";
+                    var iconFile = "icon.svg";
+                    if (asa == 226701642)
+                    {
+                        iconFile = "icon.png";
+                        iconMime = "image/png";
+                    }
+
+                    var iconpath = Path.Combine(root, dir.Name, iconFile);
+                    if (!System.IO.File.Exists(iconpath)) continue;
+
                     var icon = System.IO.File.ReadAllBytes(iconpath);
                     tinyInfo.TryGetValue(asa, out var info);
                     var url = info?.URL;
@@ -47,6 +57,7 @@ namespace VoteCoinApi.Repository
                         Asa = asa,
                         Unit = parts[0],
                         Icon = icon,
+                        IconMimeType = iconMime,
                         Url = url,
                         IsVerified = info?.IsVerified ?? false
                     });
@@ -115,6 +126,10 @@ namespace VoteCoinApi.Repository
         internal byte[]? Icon(ulong asa)
         {
             return spaces.FirstOrDefault(a => a.Asa == asa)?.Icon;
+        }
+        internal string? IconMime(ulong asa)
+        {
+            return spaces.FirstOrDefault(a => a.Asa == asa)?.IconMimeType;
         }
     }
 }

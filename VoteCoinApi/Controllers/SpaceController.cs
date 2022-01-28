@@ -41,7 +41,12 @@ namespace VoteCoinApi.Controllers
                 {
                     throw new Exception("Asset not found");
                 }
-                return File(icon, "image/svg+xml");
+                var iconMime = spaceRepository.IconMime(assetId);
+                if (string.IsNullOrEmpty(iconMime))
+                {
+                    throw new Exception("Asset icon mime type not found");
+                }
+                return File(icon, iconMime);
             }
             catch (Exception exc)
             {
