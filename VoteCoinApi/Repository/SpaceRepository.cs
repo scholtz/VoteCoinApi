@@ -93,6 +93,16 @@ namespace VoteCoinApi.Repository
                 if (list?.Count > 100)
                 {
                     statsInfo = list.ToDictionary(t => t.ASA, t => t);
+
+                }
+                foreach (var space in spaces)
+                {
+                    if (statsInfo.TryGetValue(space.Asa, out var info))
+                    {
+                        space.Events = info.Events;
+                        space.Delegations = info.Delegations;
+                        space.Questions = info.Questions;
+                    }
                 }
             }
             catch (Exception ex)
