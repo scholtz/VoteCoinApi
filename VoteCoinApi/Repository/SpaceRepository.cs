@@ -22,6 +22,7 @@ namespace VoteCoinApi.Repository
         {
             var root = config.CurrentValue.AsaFolder;
             DirectoryInfo dirInfo = new DirectoryInfo(root);
+            var pngList = new HashSet<ulong>() { 230946361, 226701642, 233939122, 2751733, 142838028, 231880341 };
             var dirs = dirInfo.GetDirectories();
             if (!string.IsNullOrEmpty(config.CurrentValue.TinyInfo))
             {
@@ -36,7 +37,7 @@ namespace VoteCoinApi.Repository
                 {
                     var iconMime = "image/svg+xml";
                     var iconFile = "icon.svg";
-                    if (asa == 226701642)
+                    if (pngList.Contains(asa))
                     {
                         iconFile = "icon.png";
                         iconMime = "image/png";
