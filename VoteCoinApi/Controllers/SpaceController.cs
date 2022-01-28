@@ -18,7 +18,7 @@ namespace VoteCoinApi.Controllers
         }
 
         [HttpGet("List")]
-        //[ResponseCache(Duration = 3600 * 1)]
+        [ResponseCache(Duration = 3600 * 1)]
         public ActionResult<IEnumerable<SpaceBase>> List()
         {
             try
@@ -30,7 +30,7 @@ namespace VoteCoinApi.Controllers
                 return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
             }
         }
-        //[ResponseCache(Duration = 3600 * 24 * 7)]
+        [ResponseCache(Duration = 3600 * 24 * 7)]
         [HttpGet("{assetId}/Icon.svg")]
         public ActionResult GetImage([FromRoute] ulong assetId)
         {
@@ -53,7 +53,7 @@ namespace VoteCoinApi.Controllers
                 return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
             }
         }
-        //[ResponseCache(Duration = 3600 * 24 * 7)]
+        [ResponseCache(Duration = 3600 * 24 * 7)]
         [HttpGet("{assetId}/Icon.png")]
         public ActionResult GetImagePng([FromRoute] ulong assetId)
         {

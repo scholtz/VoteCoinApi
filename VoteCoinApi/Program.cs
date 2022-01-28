@@ -9,7 +9,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<VoteCoinApi.Repository.SpaceRepository>();
 builder.Services.Configure<VoteCoinApi.Model.ApiConfig>(
     builder.Configuration.GetSection("api"));
-//builder.Services.AddResponseCaching();
+builder.Services.AddResponseCaching();
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
@@ -24,7 +24,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
-//app.UseResponseCaching();
+app.UseResponseCaching();
 
 app.UseAuthorization();
 
