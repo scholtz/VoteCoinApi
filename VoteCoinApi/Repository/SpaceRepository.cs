@@ -54,6 +54,7 @@ namespace VoteCoinApi.Repository
                     }
                     spaces.Add(new SpaceWithIcon()
                     {
+                        Name = parts[0],
                         Asa = asa,
                         Unit = parts[0],
                         Icon = icon,
@@ -71,7 +72,18 @@ namespace VoteCoinApi.Repository
             {
                 LoadMarketInfoFromFile();
             }
+            ProcessNamesFromTinyInfo();
             SortSpaces();
+        }
+        private void ProcessNamesFromTinyInfo()
+        {
+            foreach (var space in spaces)
+            {
+                if (tinyInfo.TryGetValue(space.Asa, out var info))
+                {
+                    space.Name = info.Name;
+                }
+            }
         }
         public async Task LoadMarketInfo()
         {
