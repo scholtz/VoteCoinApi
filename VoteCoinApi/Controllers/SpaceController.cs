@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using VoteCoinApi.Model;
@@ -5,6 +6,7 @@ using VoteCoinApi.Repository;
 
 namespace VoteCoinApi.Controllers
 {
+    [EnableCors("VoteCoinPolicy")]
     [ApiController]
     [Route("[controller]")]
     public class SpaceController : ControllerBase

@@ -12,7 +12,7 @@ builder.Services.Configure<VoteCoinApi.Model.ApiConfig>(
 builder.Services.AddResponseCaching();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
+    options.AddPolicy(name: "VoteCoinPolicy",
         builder =>
         {
             builder.WithOrigins("http://localhost:8080", "https://localhost:44363", "https://app.vote-coin.com", "https://demo.vote-coin.com");
@@ -34,7 +34,7 @@ app.UseResponseCaching();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseCors();
+app.UseCors("VoteCoinPolicy");
 
 if (Directory.Exists("/app"))
 {
