@@ -17,13 +17,13 @@ namespace VoteCoinApi.Controllers
             this.spaceRepository = spaceRepository;
         }
 
-        [HttpGet("List")]
+        [HttpGet("{env}/List")]
         [ResponseCache(Duration = 3600 * 1)]
-        public ActionResult<IEnumerable<SpaceBase>> List()
+        public ActionResult<IEnumerable<SpaceBase>> List([FromRoute] string env)
         {
             try
             {
-                return Ok(spaceRepository.List());
+                return Ok(spaceRepository.List(env));
             }
             catch (Exception exc)
             {
@@ -31,17 +31,17 @@ namespace VoteCoinApi.Controllers
             }
         }
         [ResponseCache(Duration = 3600 * 24 * 7)]
-        [HttpGet("{assetId}/Icon.svg")]
-        public ActionResult GetImage([FromRoute] ulong assetId)
+        [HttpGet("{env}/{assetId}/Icon.svg")]
+        public ActionResult GetImage([FromRoute] string env, [FromRoute] ulong assetId)
         {
             try
             {
-                var icon = spaceRepository.Icon(assetId);
+                var icon = spaceRepository.Icon(env, assetId);
                 if (icon == null || icon.Length == 0)
                 {
                     throw new Exception("Asset not found");
                 }
-                var iconMime = spaceRepository.IconMime(assetId);
+                var iconMime = spaceRepository.IconMime(env, assetId);
                 if (string.IsNullOrEmpty(iconMime))
                 {
                     throw new Exception("Asset icon mime type not found");
@@ -54,17 +54,17 @@ namespace VoteCoinApi.Controllers
             }
         }
         [ResponseCache(Duration = 3600 * 24 * 7)]
-        [HttpGet("{assetId}/Icon.png")]
-        public ActionResult GetImagePng([FromRoute] ulong assetId)
+        [HttpGet("{env}/{assetId}/Icon.png")]
+        public ActionResult GetImagePng([FromRoute] string env, [FromRoute] ulong assetId)
         {
             try
             {
-                var icon = spaceRepository.Icon(assetId);
+                var icon = spaceRepository.Icon(env, assetId);
                 if (icon == null || icon.Length == 0)
                 {
                     throw new Exception("Asset not found");
                 }
-                var iconMime = spaceRepository.IconMime(assetId);
+                var iconMime = spaceRepository.IconMime(env, assetId);
                 if (string.IsNullOrEmpty(iconMime))
                 {
                     throw new Exception("Asset icon mime type not found");

@@ -69,7 +69,8 @@ namespace VoteCoinApi.Repository
                         Icon = icon,
                         IconMimeType = iconMime,
                         Url = url,
-                        IsVerified = info?.IsVerified ?? false
+                        IsVerified = info?.IsVerified ?? false,
+                        Env = "mainnet"
                     });
                 }
             }
@@ -83,8 +84,34 @@ namespace VoteCoinApi.Repository
             }
             ProcessNamesFromTinyInfo();
             LoadStatsFromFile();
+
+            MakeTestnet();
+
             SortSpaces();
+
         }
+
+        private void MakeTestnet()
+        {
+            int i = 0;
+            if (config.CurrentValue.TestnetMapping != null)
+            {
+                foreach (var mainnet in config.CurrentValue.TestnetMapping.Keys)
+                {
+                    var mainnetAsa = spaces.FirstOrDefault(s => s.Asa == mainnet && s.Env == "mainnet");
+                    if (mainnetAsa != null)
+                    {
+                        var clone = mainnetAsa.ShallowCopy();
+                        clone.Asa = config.CurrentValue.TestnetMapping[mainnet];
+                        clone.Env = "testnet";
+                        spaces.Add(clone);
+                        i++;
+                    }
+                }
+            }
+            logger.LogInformation($"Testnet assets added: {i}");
+        }
+
         private void LoadStatsFromFile()
         {
             try
@@ -159,31 +186,31 @@ namespace VoteCoinApi.Repository
             }
             spaces = spaces.OrderByDescending(c => c.Order).ToList();
         }
-        internal IEnumerable<SpaceBase> List()
+        internal IEnumerable<SpaceBase> List(string env)
         {
             var host = config.CurrentValue.Host.TrimEnd('/');
-            return spaces.Select(o =>
-            {
-                var space = o as SpaceBase;
-                if (o.IconMimeType == "image/png")
-                {
-                    space.IconPath = $"{host}/Space/{o.Asa}/Icon.png";
-                }
-                else
-                {
-                    space.IconPath = $"{host}/Space/{o.Asa}/Icon.svg";
-                }
-                return space;
-            }
+            return spaces.Where(o => o.Env == env).Select(o =>
+              {
+                  var space = o as SpaceBase;
+                  if (o.IconMimeType == "image/png")
+                  {
+                      space.IconPath = $"{host}/Space/{o.Asa}/Icon.png";
+                  }
+                  else
+                  {
+                      space.IconPath = $"{host}/Space/{o.Asa}/Icon.svg";
+                  }
+                  return space;
+              }
             );
         }
-        internal byte[]? Icon(ulong asa)
+        internal byte[]? Icon(string env, ulong asa)
         {
-            return spaces.FirstOrDefault(a => a.Asa == asa)?.Icon;
+            return spaces.FirstOrDefault(a => a.Asa == asa && env == a.Env)?.Icon;
         }
-        internal string? IconMime(ulong asa)
+        internal string? IconMime(string env, ulong asa)
         {
-            return spaces.FirstOrDefault(a => a.Asa == asa)?.IconMimeType;
+            return spaces.FirstOrDefault(a => a.Asa == asa && env == a.Env)?.IconMimeType;
         }
     }
 }
