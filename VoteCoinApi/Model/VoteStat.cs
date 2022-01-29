@@ -7,6 +7,9 @@ namespace VoteCoinApi.Model
         [JsonProperty("asa")]
 
         public ulong ASA { get; set; }
+        [JsonProperty("env")]
+
+        public string Env { get; set; }
 
         [JsonProperty("events")]
         public ulong Events { get; set; }

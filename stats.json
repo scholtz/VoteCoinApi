@@ -1,3 +1,4 @@
 [
-	{"asa":452399768,"events":1000,"delegations":1,"questions":1}
+	{"asa":452399768,"env":"mainnet","events":1000,"delegations":1,"questions":1},
+	{"asa":48806985,"env":"testnet","events":400,"delegations":5,"questions":6}
 ]

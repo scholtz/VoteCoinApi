@@ -83,10 +83,9 @@ namespace VoteCoinApi.Repository
                 LoadMarketInfoFromFile();
             }
             ProcessNamesFromTinyInfo();
-            LoadStatsFromFile();
-
             MakeTestnet();
-
+            LoadStatsFromFile("mainnet");
+            LoadStatsFromFile("testnet");
             SortSpaces();
 
         }
@@ -115,7 +114,7 @@ namespace VoteCoinApi.Repository
             logger.LogInformation($"Testnet assets added: {config.CurrentValue?.TestnetMapping?.Count}/{i}");
         }
 
-        private void LoadStatsFromFile()
+        private void LoadStatsFromFile(string env)
         {
             try
             {
@@ -123,9 +122,9 @@ namespace VoteCoinApi.Repository
                 logger.LogInformation($"Stats: loaded {list.Count} records");
                 if (list?.Count > 0)
                 {
-                    statsInfo = list.ToDictionary(t => t.ASA, t => t);
+                    statsInfo = list.Where(t => t.Env == env).ToDictionary(t => t.ASA, t => t);
                 }
-                foreach (var space in spaces)
+                foreach (var space in spaces.Where(t => t.Env == env))
                 {
                     if (statsInfo.TryGetValue(space.Asa, out var info))
                     {
