@@ -20,7 +20,7 @@ namespace VoteCoinApi.Controllers
         }
 
         [HttpGet("{env}/List")]
-        [ResponseCache(Duration = 3600 * 1)]
+        //[ResponseCache(Duration = 3600 * 1)]
         public ActionResult<IEnumerable<SpaceBase>> List([FromRoute] string env)
         {
             try
