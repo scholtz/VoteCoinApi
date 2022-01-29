@@ -98,18 +98,21 @@ namespace VoteCoinApi.Repository
             {
                 foreach (var mainnet in config.CurrentValue.TestnetMapping.Keys)
                 {
-                    var mainnetAsa = spaces.FirstOrDefault(s => s.Asa == mainnet && s.Env == "mainnet");
-                    if (mainnetAsa != null)
+                    if (ulong.TryParse(mainnet, out var asa))
                     {
-                        var clone = mainnetAsa.ShallowCopy();
-                        clone.Asa = config.CurrentValue.TestnetMapping[mainnet];
-                        clone.Env = "testnet";
-                        spaces.Add(clone);
-                        i++;
+                        var mainnetAsa = spaces.FirstOrDefault(s => s.Asa == asa && s.Env == "mainnet");
+                        if (mainnetAsa != null)
+                        {
+                            var clone = mainnetAsa.ShallowCopy();
+                            clone.Asa = config.CurrentValue.TestnetMapping[mainnet];
+                            clone.Env = "testnet";
+                            spaces.Add(clone);
+                            i++;
+                        }
                     }
                 }
             }
-            logger.LogInformation($"Testnet assets added: {i}");
+            logger.LogInformation($"Testnet assets added: {config.CurrentValue?.TestnetMapping?.Count}/{i}");
         }
 
         private void LoadStatsFromFile()
