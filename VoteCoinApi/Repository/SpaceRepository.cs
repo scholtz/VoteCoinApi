@@ -90,10 +90,10 @@ namespace VoteCoinApi.Repository
             try
             {
                 var list = JsonConvert.DeserializeObject<List<VoteStat>>(File.ReadAllText(config.CurrentValue.StatsFile));
-                if (list?.Count > 100)
+                logger.LogInformation($"Stats: loaded {list.Count} records");
+                if (list?.Count > 0)
                 {
                     statsInfo = list.ToDictionary(t => t.ASA, t => t);
-
                 }
                 foreach (var space in spaces)
                 {
