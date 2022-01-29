@@ -197,11 +197,11 @@ namespace VoteCoinApi.Repository
                   var space = o as SpaceBase;
                   if (o.IconMimeType == "image/png")
                   {
-                      space.IconPath = $"{host}/Space/{o.Asa}/Icon.png";
+                      space.IconPath = $"{host}/Space/{o.Env}/{o.Asa}/Icon.png";
                   }
                   else
                   {
-                      space.IconPath = $"{host}/Space/{o.Asa}/Icon.svg";
+                      space.IconPath = $"{host}/Space/{o.Env}/{o.Asa}/Icon.svg";
                   }
                   return space;
               }
