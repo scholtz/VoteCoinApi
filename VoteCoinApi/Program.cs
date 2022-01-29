@@ -16,7 +16,9 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder.WithOrigins("http://localhost:8080", "https://localhost:44363", "https://app.vote-coin.com", "https://demo.vote-coin.com");
-
+            builder.AllowAnyHeader();
+            builder.AllowAnyMethod();
+            builder.AllowCredentials();
         });
 });
 var app = builder.Build();
