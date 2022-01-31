@@ -38,7 +38,7 @@ namespace VoteCoinApi.Repository
             };
 
         }
-        public async Task<ActionResult<Tinyman.V1.Model.Pool>> Get(ulong fromToken,ulong toToken)
+        public async Task<Tinyman.V1.Model.Pool> Get(ulong fromToken,ulong toToken)
         {
                 if (assets.TryGetValue(fromToken, out var from))
                 {
