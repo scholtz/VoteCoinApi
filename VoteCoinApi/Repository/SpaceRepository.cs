@@ -7,14 +7,14 @@ namespace VoteCoinApi.Repository
 {
     public class SpaceRepository
     {
-        private readonly IOptionsMonitor<Model.ApiConfig> config;
+        private readonly IOptionsMonitor<Model.Config.ApiConfig> config;
 
         private List<SpaceWithIcon> spaces;
         private List<ChartsItem> chartsInfo = new List<ChartsItem>();
         private Dictionary<ulong, TinyInfo> tinyInfo = new Dictionary<ulong, TinyInfo>();
         private Dictionary<ulong, VoteStat> statsInfo = new Dictionary<ulong, VoteStat>();
         private readonly ILogger<SpaceRepository> logger;
-        public SpaceRepository(IOptionsMonitor<Model.ApiConfig> config, ILogger<SpaceRepository> logger)
+        public SpaceRepository(IOptionsMonitor<Model.Config.ApiConfig> config, ILogger<SpaceRepository> logger)
         {
             this.logger = logger;
             this.config = config;

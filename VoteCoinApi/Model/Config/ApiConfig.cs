@@ -1,4 +1,4 @@
-﻿namespace VoteCoinApi.Model
+﻿namespace VoteCoinApi.Model.Config
 {
     public class ApiConfig
     {
