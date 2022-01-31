@@ -10,7 +10,7 @@ using VoteCoinApi.Repository;
 namespace VoteCoinApi.Repository
 {
     [Route("[controller]")]
-    public class PriceRepository 
+    public class PriceRepository
     {
         private readonly ILogger<PriceRepository> _logger;
         private readonly Algorand.V2.Algod.DefaultApi algodClient;
@@ -38,34 +38,34 @@ namespace VoteCoinApi.Repository
             };
 
         }
-        public async Task<Tinyman.V1.Model.Pool> Get(ulong fromToken,ulong toToken)
+        public async Task<Tinyman.V1.Model.Pool> Get(ulong fromToken, ulong toToken)
         {
-                if (assets.TryGetValue(fromToken, out var from))
-                {
+            if (assets.TryGetValue(fromToken, out var from))
+            {
 
-                    if (assets.TryGetValue(toToken, out var to))
+                if (assets.TryGetValue(toToken, out var to))
+                {
+                    var cacheKey = $"{fromToken}-{toToken}";
+                    if (cachePrices.TryGetValue(cacheKey, out var cache))
                     {
-                        var cacheKey = $"{fromToken}-{toToken}";
-                        if (cachePrices.TryGetValue(cacheKey, out var cache))
+                        if (cache.Time.AddMinutes(1) > DateTimeOffset.Now)
                         {
-                            if (cache.Time.AddMinutes(1) > DateTimeOffset.Now)
-                            {
-                                return cache.pool;
-                            }
+                            return cache.pool;
                         }
-                        var ret = await tinymanMainnetClient.FetchPoolAsync(from, to);
-                        cachePrices[$"{fromToken}-{toToken}"] = (DateTimeOffset.Now, ret);
-                        return ret;
                     }
-                    else
-                    {
-                        throw new Exception($"Token {toToken} not found");
-                    }
+                    var ret = await tinymanMainnetClient.FetchPoolAsync(from, to);
+                    cachePrices[$"{fromToken}-{toToken}"] = (DateTimeOffset.Now, ret);
+                    return ret;
                 }
                 else
                 {
-                    throw new Exception($"Token {fromToken} not found");
+                    throw new Exception($"Token {toToken} not found");
                 }
+            }
+            else
+            {
+                throw new Exception($"Token {fromToken} not found");
+            }
         }
     }
 }
