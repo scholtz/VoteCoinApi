@@ -25,7 +25,7 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
-                return Ok(priceRepository.Get(fromToken, toToken));
+                return Ok(await priceRepository.Get(fromToken, toToken));
             }
             catch (Exception exc)
             {
