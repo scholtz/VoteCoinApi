@@ -7,6 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<VoteCoinApi.Repository.SpaceRepository>();
+builder.Services.AddSingleton<VoteCoinApi.Repository.PriceRepository>();
 builder.Services.Configure<VoteCoinApi.Model.Config.ApiConfig>(
     builder.Configuration.GetSection("api"));
 builder.Services.Configure<VoteCoinApi.Model.Config.AlgodConfig>(
