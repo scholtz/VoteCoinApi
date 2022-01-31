@@ -21,11 +21,11 @@ namespace VoteCoinApi.Controllers
         }
         [ResponseCache(Duration = 60)]
         [HttpGet("Get/{fromToken}/{toToken}")]
-        public async Task<ActionResult<decimal>> Get([FromRoute] ulong fromToken, [FromRoute] ulong toToken)
+        public async Task<ActionResult<decimal>> Get([FromRoute] ulong toToken, [FromRoute] ulong fromToken)
         {
             try
             {
-                return Ok(await priceRepository.Get(fromToken, toToken));
+                return Ok(Math.Round(await priceRepository.Get(fromToken, toToken),6));
             }
             catch (Exception exc)
             {
