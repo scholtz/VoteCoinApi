@@ -21,7 +21,7 @@ namespace VoteCoinApi.Controllers
         }
         [ResponseCache(Duration = 60)]
         [HttpGet("Get/{fromToken}/{toToken}")]
-        public async Task<ActionResult<Tinyman.V1.Model.Pool>> Get([FromRoute] ulong fromToken, [FromRoute] ulong toToken)
+        public async Task<ActionResult<decimal>> Get([FromRoute] ulong fromToken, [FromRoute] ulong toToken)
         {
             try
             {

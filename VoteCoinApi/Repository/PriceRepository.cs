@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
 using System.Text;
+using Tinyman.V1.Model;
 using VoteCoinApi.Model;
 using VoteCoinApi.Repository;
 
@@ -38,7 +39,18 @@ namespace VoteCoinApi.Repository
             };
 
         }
-        public async Task<Tinyman.V1.Model.Pool> Get(ulong fromToken, ulong toToken)
+        private decimal MidPrice(Tinyman.V1.Model.Pool pool, Tinyman.V1.Model.Asset fromToken, Tinyman.V1.Model.Asset toToken)
+        {
+            ulong q = 1000000;
+            var from = pool.CalculateFixedInputSwapQuote(new Tinyman.V1.Model.AssetAmount(fromToken, q), 0.00);
+            var price1 = Convert.ToDecimal(q) / Convert.ToDecimal(from.AmountOut.Amount);
+
+            var to = pool.CalculateFixedInputSwapQuote(new Tinyman.V1.Model.AssetAmount(toToken, q), 0.00);
+            var price2 = Convert.ToDecimal(to.AmountOut.Amount) / Convert.ToDecimal(q);
+
+            return (price1 + price2) / 2;
+        }
+        public async Task<decimal> Get(ulong fromToken, ulong toToken)
         {
             if (assets.TryGetValue(fromToken, out var from))
             {
@@ -50,12 +62,12 @@ namespace VoteCoinApi.Repository
                     {
                         if (cache.Time.AddMinutes(1) > DateTimeOffset.Now)
                         {
-                            return cache.pool;
+                            return MidPrice(cache.pool, from, to);
                         }
                     }
                     var ret = await tinymanMainnetClient.FetchPoolAsync(from, to);
                     cachePrices[$"{fromToken}-{toToken}"] = (DateTimeOffset.Now, ret);
-                    return ret;
+                    return MidPrice(ret, from, to);
                 }
                 else
                 {
