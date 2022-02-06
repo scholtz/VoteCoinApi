@@ -7,14 +7,17 @@ namespace VoteCoinApi.Repository
     {
         private readonly IOptionsMonitor<Model.Config.ApiConfig> config;
         private readonly ILogger<SpaceRepository> logger;
+        private readonly SpaceRepository spaceRepository;
         private VoteCoinMonitor.Model.DB? Cache = null;
         private DateTimeOffset? CacheUpdated = null;
-        public TransactionRepository(IOptionsMonitor<Model.Config.ApiConfig> config, ILogger<SpaceRepository> logger)
+        public TransactionRepository(SpaceRepository spaceRepository, IOptionsMonitor<Model.Config.ApiConfig> config, ILogger<SpaceRepository> logger)
         {
             this.config = config;
             this.logger = logger;
+            this.spaceRepository = spaceRepository;
+            UpdateCache();
         }
-        private void UpdateCache()
+        public void UpdateCache()
         {
             if (CacheUpdated != null && CacheUpdated.Value.AddSeconds(60) > DateTimeOffset.Now)
             {
@@ -26,6 +29,24 @@ namespace VoteCoinApi.Repository
                 Cache = VoteCoinMonitor.Utils.DBExtensions.LoadDB(config.CurrentValue.TransactionsDBFile);
                 CacheUpdated = DateTimeOffset.Now;
                 logger.LogInformation($"Cache: {string.Join(",", Cache.LatestAssetCheckedInBlock.Select(k => $"{k.Key}={k.Value}"))}");
+
+                foreach (var item in Cache.LatestAssetCheckedInBlock)
+                {
+                    try
+                    {
+                        var events = Cache.AssetsTrustedListTxs[item.Key].Count +
+                                        Cache.AssetsVoteTxs[item.Key].Count +
+                                        Cache.AssetsQuestionTxs[item.Key].Count +
+                                        Cache.AssetsDelegationTxs[item.Key].Count;
+
+                        spaceRepository.UpdateStats(item.Key, events, delegations: Cache.AssetsDelegationTxs[item.Key].Count, questions: Cache.AssetsQuestionTxs[item.Key].Count);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex.Message, ex);
+                    }
+                }
+
             }
             catch (Exception ex)
             {

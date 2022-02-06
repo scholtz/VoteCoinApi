@@ -29,7 +29,10 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 var repo = app.Services.GetService<VoteCoinApi.Repository.SpaceRepository>();
-_ = repo.List("mainnet");// init repo
+_ = repo?.List("mainnet");// init repo
+
+var transactRepo = app.Services.GetService<VoteCoinApi.Repository.TransactionRepository>();
+transactRepo?.UpdateCache();
 
 app.UseSwagger();
 app.UseSwaggerUI();

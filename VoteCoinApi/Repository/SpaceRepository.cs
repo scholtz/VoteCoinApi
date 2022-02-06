@@ -21,6 +21,17 @@ namespace VoteCoinApi.Repository
             this.spaces = new List<SpaceWithIcon>() { };
             Init();
         }
+
+        public void UpdateStats(ulong asa, int events, int delegations, int questions)
+        {
+            if (statsInfo.ContainsKey(asa))
+            {
+                statsInfo[asa].Events = Convert.ToUInt64(events);
+                statsInfo[asa].Delegations = Convert.ToUInt64(delegations);
+                statsInfo[asa].Questions = Convert.ToUInt64(questions);
+            }
+        }
+
         protected void Init()
         {
             var root = config.CurrentValue.AsaFolder;
