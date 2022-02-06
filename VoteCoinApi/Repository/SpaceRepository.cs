@@ -29,6 +29,7 @@ namespace VoteCoinApi.Repository
                 statsInfo[asa].Events = Convert.ToUInt64(events);
                 statsInfo[asa].Delegations = Convert.ToUInt64(delegations);
                 statsInfo[asa].Questions = Convert.ToUInt64(questions);
+                logger.LogInformation($"Stats: {asa} {statsInfo[asa].Events} {statsInfo[asa].Delegations} {statsInfo[asa].Questions}");
             }
         }
 
