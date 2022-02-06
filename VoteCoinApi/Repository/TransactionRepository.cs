@@ -34,12 +34,35 @@ namespace VoteCoinApi.Repository
                 {
                     try
                     {
-                        var events = Cache.AssetsTrustedListTxs[item.Key].Count +
-                                        Cache.AssetsVoteTxs[item.Key].Count +
-                                        Cache.AssetsQuestionTxs[item.Key].Count +
-                                        Cache.AssetsDelegationTxs[item.Key].Count;
-
-                        spaceRepository.UpdateStats(item.Key, events, delegations: Cache.AssetsDelegationTxs[item.Key].Count, questions: Cache.AssetsQuestionTxs[item.Key].Count);
+                        if (Cache.AssetsTrustedListTxs.ContainsKey(item.Key))
+                        {
+                            var tlTxs = 0;
+                            var voteTxs = 0;
+                            var questionTxs = 0;
+                            var delegationTxs = 0;
+                            if (Cache.AssetsTrustedListTxs.TryGetValue(item.Key, out var list))
+                            {
+                                tlTxs = list.Count;
+                            }
+                            if (Cache.AssetsVoteTxs.TryGetValue(item.Key, out var listAssetsVoteTxs))
+                            {
+                                voteTxs = listAssetsVoteTxs.Count;
+                            }
+                            if (Cache.AssetsQuestionTxs.TryGetValue(item.Key, out var listAssetsQuestionTxs))
+                            {
+                                questionTxs = listAssetsQuestionTxs.Count;
+                            }
+                            if (Cache.AssetsDelegationTxs.TryGetValue(item.Key, out var listAssetsDelegationTxs))
+                            {
+                                delegationTxs = listAssetsDelegationTxs.Count;
+                            }
+                            var events = tlTxs +
+                                            voteTxs +
+                                            questionTxs +
+                                            delegationTxs;
+                            logger.LogInformation($"Updating cache: {item.Key} {events}");
+                            spaceRepository.UpdateStats(item.Key, events, delegations: delegationTxs, questions: questionTxs);
+                        }
                     }
                     catch (Exception ex)
                     {
