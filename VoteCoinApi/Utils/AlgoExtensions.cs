@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VoteCoinApi.Model.Config;
 
 namespace VoteCoinMonitor.Utils
 {
@@ -27,36 +28,6 @@ namespace VoteCoinMonitor.Utils
             {
                 return await instance.TransactionsAsync(ms);
             }
-        }
-        public static Algorand.V2.Algod.DefaultApi GetAlgod(AlgodConfiguration config)
-        {
-            var algodHttpClient = Algorand.V2.HttpClientConfigurator.ConfigureHttpClient(config.Host, config.Token, config.Header);
-
-            var api = new Algorand.V2.Algod.DefaultApi(algodHttpClient)
-            {
-                BaseUrl = config.Host,
-            };
-            return api;
-        }
-        public static Algorand.V2.Indexer.SearchApi GetSearchApi(IndexerConfiguration config)
-        {
-            var algodHttpClient = Algorand.V2.HttpClientConfigurator.ConfigureHttpClient(config.Host, config.Token, config.Header);
-
-            var api = new Algorand.V2.Indexer.SearchApi(algodHttpClient)
-            {
-                BaseUrl = config.Host,
-            };
-            return api;
-        }
-        public static Algorand.V2.Indexer.LookupApi GetLookupApi(IndexerConfiguration config)
-        {
-            var algodHttpClient = Algorand.V2.HttpClientConfigurator.ConfigureHttpClient(config.Host, config.Token, config.Header);
-
-            var api = new Algorand.V2.Indexer.LookupApi(algodHttpClient)
-            {
-                BaseUrl = config.Host,
-            };
-            return api;
         }
         private static byte[] AVoteText = null;
         public static bool IsAvote(byte[] note)
