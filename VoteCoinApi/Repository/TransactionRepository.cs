@@ -22,8 +22,10 @@ namespace VoteCoinApi.Repository
             }
             try
             {
+                logger.LogInformation("Updating cache");
                 Cache = VoteCoinMonitor.Utils.DBExtensions.LoadDB(config.CurrentValue.TransactionsDBFile);
                 CacheUpdated = DateTimeOffset.Now;
+                logger.LogInformation($"Cache: {string.Join(",", Cache.LatestAssetCheckedInBlock.Select(k => $"{k.Key}={k.Value}"))}");
             }
             catch (Exception ex)
             {
