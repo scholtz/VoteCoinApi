@@ -8,5 +8,6 @@
         public string TinyInfo { get; set; }
         public string StatsFile { get; set; }
         public Dictionary<string, ulong> TestnetMapping { get; set; }
+        public string TransactionsDBFile { get; set; } = "/app/data/db.json";
     }
 }
