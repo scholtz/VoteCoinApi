@@ -59,7 +59,7 @@ namespace VoteCoinApi.Repository
                                         questionTxs +
                                         delegationTxs;
                         logger.LogInformation($"Updating cache: {item.Key} {events}");
-                        spaceRepository.UpdateStats(item.Key, events, delegations: delegationTxs, questions: questionTxs);
+                        spaceRepository.UpdateStats(item.Key, events, delegations: delegationTxs, questions: questionTxs, "mainnet");
                     }
                     catch (Exception ex)
                     {
