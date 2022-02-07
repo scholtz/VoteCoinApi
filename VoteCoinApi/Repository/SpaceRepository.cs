@@ -22,7 +22,7 @@ namespace VoteCoinApi.Repository
             Init();
         }
 
-        public void UpdateStats(ulong asa, int events, int delegations, int questions)
+        public void UpdateStats(ulong asa, int events, int delegations, int questions, string env)
         {
             if (statsInfo.ContainsKey(asa))
             {
@@ -35,6 +35,7 @@ namespace VoteCoinApi.Repository
                 statsInfo[asa].Events = Convert.ToUInt64(events);
                 statsInfo[asa].Delegations = Convert.ToUInt64(delegations);
                 statsInfo[asa].Questions = Convert.ToUInt64(questions);
+                statsInfo[asa].Env = env;
                 logger.LogInformation($"Stats: {asa} {statsInfo[asa].Events} {statsInfo[asa].Delegations} {statsInfo[asa].Questions}");
             }
         }
