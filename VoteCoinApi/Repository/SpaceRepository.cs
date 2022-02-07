@@ -38,6 +38,17 @@ namespace VoteCoinApi.Repository
                 statsInfo[asa].Env = env;
                 logger.LogInformation($"Stats: {asa} {statsInfo[asa].Events} {statsInfo[asa].Delegations} {statsInfo[asa].Questions}");
             }
+
+
+            foreach (var space in spaces.Where(t => t.Env == env))
+            {
+                if (statsInfo.TryGetValue(space.Asa, out var info))
+                {
+                    space.Events = info.Events;
+                    space.Delegations = info.Delegations;
+                    space.Questions = info.Questions;
+                }
+            }
         }
 
         protected void Init()
