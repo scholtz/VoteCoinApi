@@ -140,10 +140,21 @@ namespace VoteCoinApi.Repository
         internal IEnumerable<Transaction> ListDelegations(string env, ulong assetId)
         {
             UpdateCache();
-
-            if (Cache != null && Cache.AssetsDelegationTxs.TryGetValue(assetId, out var collection))
+            switch (env)
             {
-                return collection.Values;
+                case "mainnet":
+                    if (Cache != null && Cache.AssetsDelegationTxs.TryGetValue(assetId, out var collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
+                case "testnet":
+                default:
+                    if (CacheTestnet != null && CacheTestnet.AssetsDelegationTxs.TryGetValue(assetId, out collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
             }
             return Enumerable.Empty<Transaction>();
         }
@@ -151,9 +162,21 @@ namespace VoteCoinApi.Repository
         {
             UpdateCache();
 
-            if (Cache != null && Cache.AssetsQuestionTxs.TryGetValue(assetId, out var collection))
+            switch (env)
             {
-                return collection.Values;
+                case "mainnet":
+                    if (Cache != null && Cache.AssetsQuestionTxs.TryGetValue(assetId, out var collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
+                case "testnet":
+                default:
+                    if (CacheTestnet != null && CacheTestnet.AssetsQuestionTxs.TryGetValue(assetId, out collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
             }
             return Enumerable.Empty<Transaction>();
         }
@@ -161,9 +184,21 @@ namespace VoteCoinApi.Repository
         {
             UpdateCache();
 
-            if (Cache != null && Cache.AssetsTrustedListTxs.TryGetValue(assetId, out var collection))
+            switch (env)
             {
-                return collection.Values;
+                case "mainnet":
+                    if (Cache != null && Cache.AssetsTrustedListTxs.TryGetValue(assetId, out var collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
+                case "testnet":
+                default:
+                    if (CacheTestnet != null && CacheTestnet.AssetsTrustedListTxs.TryGetValue(assetId, out collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
             }
             return Enumerable.Empty<Transaction>();
         }
@@ -171,9 +206,21 @@ namespace VoteCoinApi.Repository
         {
             UpdateCache();
 
-            if (Cache != null && Cache.AssetsVoteTxs.TryGetValue(assetId, out var collection))
+            switch (env)
             {
-                return collection.Values;
+                case "mainnet":
+                    if (Cache != null && Cache.AssetsVoteTxs.TryGetValue(assetId, out var collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
+                case "testnet":
+                default:
+                    if (CacheTestnet != null && CacheTestnet.AssetsVoteTxs.TryGetValue(assetId, out collection))
+                    {
+                        return collection.Values;
+                    }
+                    break;
             }
             return Enumerable.Empty<Transaction>();
         }
