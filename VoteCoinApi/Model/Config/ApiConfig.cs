@@ -9,5 +9,6 @@
         public string StatsFile { get; set; }
         public Dictionary<string, ulong> TestnetMapping { get; set; }
         public string TransactionsDBFile { get; set; } = "/app/data/db.json";
+        public string TransactionsTestnetDBFile { get; set; } = "/app/data-testnet/testnet.json";
     }
 }
