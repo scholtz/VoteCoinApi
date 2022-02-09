@@ -86,7 +86,7 @@ namespace VoteCoinApi.Repository
                 if (File.Exists(config.CurrentValue.TransactionsTestnetDBFile))
                 {
                     logger.LogInformation("Updating testnet cache");
-                    CacheTestnet = VoteCoinMonitor.Utils.DBExtensions.LoadDB(config.CurrentValue.TransactionsDBFile);
+                    CacheTestnet = VoteCoinMonitor.Utils.DBExtensions.LoadDB(config.CurrentValue.TransactionsTestnetDBFile);
                     CacheTestnetUpdated = DateTimeOffset.Now;
                     logger.LogInformation($"Cache: {string.Join(",", CacheTestnet.LatestAssetCheckedInBlock.Select(k => $"{k.Key}={k.Value}"))}");
 
