@@ -30,7 +30,9 @@ namespace VoteCoinApi.Repository
                 statsInfo[asa].Delegations = Convert.ToUInt64(delegations);
                 statsInfo[asa].Questions = Convert.ToUInt64(questions);
                 logger.LogInformation($"Stats: {asa} {statsInfo[asa].Events} {statsInfo[asa].Delegations} {statsInfo[asa].Questions}");
-            }else{
+            }
+            else
+            {
                 statsInfo[asa] = new VoteStat();
                 statsInfo[asa].Events = Convert.ToUInt64(events);
                 statsInfo[asa].Delegations = Convert.ToUInt64(delegations);
@@ -56,7 +58,7 @@ namespace VoteCoinApi.Repository
             var root = config.CurrentValue.AsaFolder;
             DirectoryInfo dirInfo = new DirectoryInfo(root);
             var pngList = new HashSet<ulong>() { 230946361, 226701642, 233939122, 2751733, 142838028, 231880341 };
-            var banList = new HashSet<ulong>() { 297995609 };
+            var banList = new HashSet<ulong>();
             var dirs = dirInfo.GetDirectories();
             if (!string.IsNullOrEmpty(config.CurrentValue.TinyInfo))
             {
@@ -103,7 +105,46 @@ namespace VoteCoinApi.Repository
                         Env = "mainnet"
                     });
                 }
+
             }
+            // add algo
+            var algoDir = "ALGO";
+            if (Directory.Exists(Path.Combine(config.CurrentValue.AsaFolder, algoDir)))
+            {
+                ulong asa = 0;
+                var iconMime = "image/svg+xml";
+                var iconFile = "icon.svg";
+                if (pngList.Contains(asa))
+                {
+                    iconFile = "icon.png";
+                    iconMime = "image/png";
+                }
+
+                var iconpath = Path.Combine(root, algoDir, iconFile);
+                if (System.IO.File.Exists(iconpath))
+                {
+
+                    var icon = System.IO.File.ReadAllBytes(iconpath);
+                    tinyInfo.TryGetValue(asa, out var info);
+                    var url = info?.URL;
+                    if (!string.IsNullOrEmpty(url) && !(url.StartsWith("//") || url.StartsWith("http://") || url.StartsWith("https://")))
+                    {
+                        url = "https://" + url;
+                    }
+                    spaces.Add(new SpaceWithIcon()
+                    {
+                        Name = algoDir,
+                        Asa = asa,
+                        Unit = algoDir,
+                        Icon = icon,
+                        IconMimeType = iconMime,
+                        Url = url,
+                        IsVerified = true,
+                        Env = "mainnet"
+                    });
+                }
+            }
+
             if (string.IsNullOrEmpty(config.CurrentValue.MarketInfo))
             {
                 LoadMarketInfo().Wait();
