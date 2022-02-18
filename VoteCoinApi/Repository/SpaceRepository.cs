@@ -51,6 +51,8 @@ namespace VoteCoinApi.Repository
                     space.Questions = info.Questions;
                 }
             }
+
+            SortSpaces();
         }
 
         protected void Init()
