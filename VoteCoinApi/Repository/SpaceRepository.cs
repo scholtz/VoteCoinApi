@@ -257,7 +257,7 @@ namespace VoteCoinApi.Repository
             foreach (var space in spaces)
             {
                 var sumOfLiquidity = chartsInfo.Where(c => c.Asset1Id == space.Asa || c.Asset1Id == space.Asa).Sum(c => c.Liquidity);
-                space.Order = 10000 * space.Events + sumOfLiquidity;
+                space.Order = 1000000 * space.Events + sumOfLiquidity;
             }
             spaces = spaces.OrderByDescending(c => c.Order).ToList();
         }
