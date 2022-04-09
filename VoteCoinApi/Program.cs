@@ -12,8 +12,18 @@ builder.Services.AddSingleton<VoteCoinApi.Repository.TransactionRepository>();
 
 builder.Services.Configure<VoteCoinApi.Model.Config.ApiConfig>(
     builder.Configuration.GetSection("api"));
-builder.Services.Configure<VoteCoinApi.Model.Config.AlgodConfig>(
+if (builder.Configuration.GetSection("Algod") != null)
+{
+    builder.Services.Configure<VoteCoinApi.Model.Config.AlgodConfig>(
+    builder.Configuration.GetSection("Algod"));
+}
+else
+{
+    builder.Services.Configure<VoteCoinApi.Model.Config.AlgodConfig>(
     builder.Configuration.GetSection("algod"));
+}
+builder.Services.Configure<VoteCoinApi.Model.Config.IndexerConfig>(
+    builder.Configuration.GetSection("Indexer"));
 builder.Services.AddResponseCaching();
 builder.Services.AddCors(options =>
 {

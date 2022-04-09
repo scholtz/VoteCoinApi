@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+		<Description>This library provides access to the Tinyman AMM on the Algorand blockchain.</Description>
+		<Company></Company>
+		<PackageProjectUrl>https://github.com/geoffodonnell/dotnet-tinyman-sdk</PackageProjectUrl>
+		<Authors>Geoff O'Donnell</Authors>
+		<RepositoryUrl>https://github.com/geoffodonnell/dotnet-tinyman-sdk</RepositoryUrl>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<NoWarn>1591;1701;1702</NoWarn>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="V1\asc.v1_0.json" />
+		<None Remove="V1\asc.v1_1.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="V1\asc.v1_0.json" />
+		<EmbeddedResource Include="V1\asc.v1_1.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Algorand.Common" Version="0.0.0.4" />
+		<PackageReference Include="BouncyCastle.NetCore" Version="1.8.8" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="System.Memory" Version="4.5.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\dotnet-algorand-sdk\dotnet-algorand-sdk\dotnet-algorand-sdk.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -15,11 +15,16 @@ namespace VoteCoinApi.Repository
     {
         private readonly ILogger<PriceRepository> _logger;
         private readonly Algorand.V2.Algod.DefaultApi algodClient;
+        private readonly Algorand.V2.Indexer.LookupApi lookupClient;
         private readonly Tinyman.V1.TinymanMainnetClient tinymanMainnetClient;
         private readonly Dictionary<ulong, Tinyman.V1.Model.Asset> assets;
         private ConcurrentDictionary<string, (DateTimeOffset Time, Tinyman.V1.Model.Pool pool)> cachePrices = new ConcurrentDictionary<string, (DateTimeOffset, Tinyman.V1.Model.Pool)>();
 
-        public PriceRepository(ILogger<PriceRepository> logger, IOptionsMonitor<Model.Config.AlgodConfig> algodConfig)
+        public PriceRepository(
+            ILogger<PriceRepository> logger,
+            IOptionsMonitor<Model.Config.AlgodConfig> algodConfig,
+            IOptionsMonitor<Model.Config.IndexerConfig> indexerConfig
+            )
         {
             _logger = logger;
 
@@ -27,9 +32,17 @@ namespace VoteCoinApi.Repository
 
             algodClient = new Algorand.V2.Algod.DefaultApi(algodHttpClient)
             {
-                BaseUrl = algodConfig.CurrentValue.Host,
+                BaseUrl = algodConfig.CurrentValue.Host
             };
-            tinymanMainnetClient = new Tinyman.V1.TinymanMainnetClient(algodClient);
+
+
+            var indexerHttpClient = HttpClientConfigurator.ConfigureHttpClient(indexerConfig.CurrentValue.Host, indexerConfig.CurrentValue.Token, indexerConfig.CurrentValue.Header);
+
+            lookupClient = new Algorand.V2.Indexer.LookupApi(indexerHttpClient)
+            {
+                BaseUrl = indexerConfig.CurrentValue.Host
+            };
+            tinymanMainnetClient = new Tinyman.V1.TinymanMainnetClient(algodClient, lookupClient);
 
             assets = new Dictionary<ulong, Tinyman.V1.Model.Asset>()
             {
