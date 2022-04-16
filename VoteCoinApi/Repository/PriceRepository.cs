@@ -92,5 +92,20 @@ namespace VoteCoinApi.Repository
                 throw new Exception($"Token {fromToken} not found");
             }
         }
+
+        internal async Task<ulong> CirculationSupply(string[] voteCoinDAOAddressesList)
+        {
+            ulong ret = 1000000000000000L;
+            foreach (var address in voteCoinDAOAddressesList)
+            {
+                var account = await lookupClient.AccountsAsync(address,null,false);
+                var asset = account.Account?.Assets?.FirstOrDefault(a => a.AssetId == 452399768);
+                if(asset?.Amount > 0)
+                {
+                    ret -= asset.Amount;
+                }
+            }
+            return Convert.ToUInt64(ret);
+        }
     }
 }
