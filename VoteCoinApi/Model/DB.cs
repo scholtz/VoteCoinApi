@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
+﻿using Algorand.Indexer.Model;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

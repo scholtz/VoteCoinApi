@@ -11,24 +11,6 @@ namespace VoteCoinMonitor.Utils
     internal class AlgoExtensions
     {
 
-        /// <summary>
-        /// encode and submit signed transactions using algod v2 api
-        /// </summary>
-        /// <param name="instance"></param>
-        /// <param name="signedTx"></param>
-        /// <returns></returns>
-        public static async Task<Algorand.V2.Algod.Model.PostTransactionsResponse> SubmitTransactions(Algorand.V2.Algod.DefaultApi instance, IEnumerable<Algorand.SignedTransaction> signedTxs) //throws Exception
-        {
-            List<byte> byteList = new List<byte>();
-            foreach (var signedTx in signedTxs)
-            {
-                byteList.AddRange(Algorand.Encoder.EncodeToMsgPack(signedTx));
-            }
-            using (MemoryStream ms = new MemoryStream(byteList.ToArray()))
-            {
-                return await instance.TransactionsAsync(ms);
-            }
-        }
         private static byte[] AVoteText = null;
         public static bool IsAvote(byte[] note)
         {

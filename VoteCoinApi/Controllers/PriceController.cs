@@ -1,5 +1,4 @@
-﻿using Algorand.V2;
-using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Collections.Concurrent;
@@ -19,19 +18,19 @@ namespace VoteCoinApi.Controllers
         {
             this.priceRepository = priceRepository;
         }
-        [ResponseCache(Duration = 60)]
-        [HttpGet("Get/{fromToken}/{toToken}")]
-        public async Task<ActionResult<decimal>> Get([FromRoute] ulong toToken, [FromRoute] ulong fromToken)
-        {
-            try
-            {
-                return Ok(Math.Round(await priceRepository.Get(fromToken, toToken), 6));
-            }
-            catch (Exception exc)
-            {
-                return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
-            }
-        }
+        //[ResponseCache(Duration = 60)]
+        //[HttpGet("Get/{fromToken}/{toToken}")]
+        //public async Task<ActionResult<decimal>> Get([FromRoute] ulong toToken, [FromRoute] ulong fromToken)
+        //{
+        //    try
+        //    {
+        //        return Ok(Math.Round(await priceRepository.Get(fromToken, toToken), 6));
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        return BadRequest(new ProblemDetails() { Detail = exc.Message + (exc.InnerException != null ? $";\n{exc.InnerException.Message}" : "") + "\n" + exc.StackTrace, Title = exc.Message, Type = exc.GetType().ToString() });
+        //    }
+        //}
         /// <summary>
         /// Returns total number of tokens. Total supply will not change.
         /// </summary>

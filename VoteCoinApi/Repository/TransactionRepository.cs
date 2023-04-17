@@ -1,4 +1,4 @@
-﻿using Algorand.V2.Indexer.Model;
+﻿using Algorand.Indexer.Model;
 using Microsoft.Extensions.Options;
 
 namespace VoteCoinApi.Repository

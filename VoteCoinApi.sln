@@ -1,13 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.32112.339
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoteCoinApi", "VoteCoinApi\VoteCoinApi.csproj", "{BD7B3044-9C83-4478-8E04-669CEB1BE16B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-algorand-sdk", "dotnet-algorand-sdk\dotnet-algorand-sdk\dotnet-algorand-sdk.csproj", "{082A189E-B82F-4076-AC41-481165560A5C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tinyman", "dotnet-tinyman-sdk\src\Tinyman\Tinyman.csproj", "{9181B8DA-01CA-4633-826A-A9900CDEB254}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +15,6 @@ Global
 		{BD7B3044-9C83-4478-8E04-669CEB1BE16B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD7B3044-9C83-4478-8E04-669CEB1BE16B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD7B3044-9C83-4478-8E04-669CEB1BE16B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{082A189E-B82F-4076-AC41-481165560A5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{082A189E-B82F-4076-AC41-481165560A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{082A189E-B82F-4076-AC41-481165560A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{082A189E-B82F-4076-AC41-481165560A5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9181B8DA-01CA-4633-826A-A9900CDEB254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9181B8DA-01CA-4633-826A-A9900CDEB254}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9181B8DA-01CA-4633-826A-A9900CDEB254}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9181B8DA-01CA-4633-826A-A9900CDEB254}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
