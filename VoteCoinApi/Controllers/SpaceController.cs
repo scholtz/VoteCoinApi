@@ -31,6 +31,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 return Ok(spaceRepository.List(env));
             }
             catch (Exception exc)
@@ -50,6 +52,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 var icon = spaceRepository.Icon(env, assetId);
                 if (icon == null || icon.Length == 0)
                 {
@@ -79,6 +83,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 var icon = spaceRepository.Icon(env, assetId);
                 if (icon == null || icon.Length == 0)
                 {
@@ -103,6 +109,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 return Ok(transactionRepository.ListDelegations(env, assetId));
             }
             catch (Exception exc)
@@ -115,6 +123,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 return Ok(transactionRepository.ListQuestions(env, assetId));
             }
             catch (Exception exc)
@@ -127,6 +137,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 return Ok(transactionRepository.AssetsTrustedListTxs(env, assetId));
             }
             catch (Exception exc)
@@ -139,6 +151,8 @@ namespace VoteCoinApi.Controllers
         {
             try
             {
+                if (env == "mainnet-v1.0") { env = "mainnet"; }
+                if (env == "testnet-v1.0") { env = "testnet"; }
                 return Ok(transactionRepository.AssetsVoteTxs(env, assetId));
             }
             catch (Exception exc)
